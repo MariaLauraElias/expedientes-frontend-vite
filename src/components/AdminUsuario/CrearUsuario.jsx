@@ -1,10 +1,9 @@
 import * as React from "react";
+import { useContext } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -16,7 +15,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
+import UserContext from "../../contexts/UserContext";
 function Copyright(props) {
   return (
     <Typography
@@ -35,11 +34,13 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
+
 
 const defaultTheme = createTheme();
 
 export default function CrearUsuario() {
+  const {createUser} = useContext(UserContext);
+  
   const [nivelPermiso, setNivelPermiso] = React.useState("");
 
   const handleChange = (event) => {
@@ -49,16 +50,19 @@ export default function CrearUsuario() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+
+    const values = {
       nombre: data.get("nombre"),
       apellido: data.get("apellido"),
       legajo: data.get("legajo"),
       usuario: data.get("usuario"),
-      nivelPermiso: data.get("nivelPermiso"),
-      activo: data.get("activo"),
+      nivel_permiso: data.get("nivelPermiso"),
+      activo: 1,
       mail: data.get("mail"),
       pass: data.get("pass"),
-    });
+    }
+    createUser(values);
+    
   };
 
   return (
@@ -136,6 +140,7 @@ export default function CrearUsuario() {
                   label="Email"
                   name="mail"
                   autoComplete="off"
+                  type="email"
                 />
               </Grid>
               <Grid item xs={12}>

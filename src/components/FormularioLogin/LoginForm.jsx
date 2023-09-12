@@ -59,10 +59,10 @@ export default function LoginForm() {
     const values = {
       usuario: data.get("usuario"),
       pass: data.get("pass"),
-    }
-    
+    };
+    console.log(values);
+
     login(values);
-   
   };
 
   return (
