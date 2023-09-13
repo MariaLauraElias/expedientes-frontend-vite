@@ -42,32 +42,48 @@ const defaultTheme = createTheme();
 export default function CrearUsuario() {
   const { createUser } = useContext(UserContext);
 
-  const {handleChange, handleSubmit, errors, values} = useFormik({
-    initialValues:{
-      nombre:"",
-      apellido:"",
-      legajo:"",
-      usuario:"",
-      pass:"",
-      email:"",
-      
-    },
-    validationSchema: Yup.object({
+  const { handleChange, handleSubmit, errors, values, setFieldValue } =
+    useFormik({
+      initialValues: {
+        nombre: "",
+        apellido: "",
+        legajo: "",
+        usuario: "",
+        pass: "",
+        pass2: "",
+        mail: "",
+        nivel_permiso: "USR",
+      },
+      validationSchema: Yup.object({
         nombre: Yup.string().required("Debes ingresar un nombre"),
         apellido: Yup.string().required("Debes ingresar un apellido"),
         usuario: Yup.string()
-        .matches(/^\S*$/, 'El usuario no puede contener espacios')
-        .required('El campo usuario es obligatorio'),
-        email: Yup.string().required("Debes ingresar un email").email("Debes ingresar un email válido"),
-        pass: Yup.string().required("Debes ingresar una contraseña").min(8, "La contraseña debe tener al menos 8 caracteres").matches(/\d/,"La contraseña debe contener al menos un número"),
+          .trim()
+          .matches(
+            /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/,
+            "El usuario no puede contener espacios"
+          )
+          .required("El campo usuario es obligatorio"),
+        mail: Yup.string()
+          .required("Debes ingresar un email")
+          .email("Debes ingresar un email válido"),
+        pass: Yup.string()
+          .required("Debes ingresar una contraseña")
+          .min(8, "La contraseña debe tener al menos 8 caracteres")
+          .matches(/\d/, "La contraseña debe contener al menos un número")
+          .matches(/[a-z]/, 'Debe contener al menos una letra minúscula')
+          .matches(/[A-Z]/, 'Debe contener al menos una letra mayúscula')
+          .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Debe contener al menos un carácter especial'),
+        pass2: Yup.string()
+          .required("Debes ingresar otra vez la contraseña")
+          .oneOf([Yup.ref("pass"), null], "Las contraseñas no coinciden"),  
       }),
-    onSubmit:(values, { resetForm }) => {
-      createUser(values);
-      resetForm();
-    }
-  })
+      onSubmit: (values, { resetForm }) => {
+        createUser(values);
+        resetForm();
+      },
+    });
 
-  
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -101,10 +117,9 @@ export default function CrearUsuario() {
                   fullWidth
                   id="nombre"
                   label="Nombre"
-                  autoFocus
                   autoComplete="off"
                   value={values.nombre}
-                  error={errors.nombre? true : false}
+                  error={errors.nombre ? true : false}
                   helperText={errors.nombre}
                   onChange={handleChange}
                 />
@@ -136,6 +151,8 @@ export default function CrearUsuario() {
                   autoComplete="off"
                   error={errors.usuario ? true : false}
                   helperText={errors.usuario}
+                  value={values.usuario}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -149,6 +166,8 @@ export default function CrearUsuario() {
                   autoComplete="off"
                   error={errors.legajo ? true : false}
                   helperText={errors.legajo}
+                  value={values.legajo}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -162,6 +181,8 @@ export default function CrearUsuario() {
                   type="email"
                   error={errors.mail ? true : false}
                   helperText={errors.mail}
+                  value={values.mail}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -175,6 +196,8 @@ export default function CrearUsuario() {
                   autoComplete="off"
                   error={errors.pass ? true : false}
                   helperText={errors.pass}
+                  value={values.pass}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -188,27 +211,31 @@ export default function CrearUsuario() {
                   autoComplete="off"
                   error={errors.pass2 ? true : false}
                   helperText={errors.pass2}
+                  value={values.pass2}
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12}>
-                {/* <Box sx={{ minWidth: 120 }}>
+                <Box sx={{ minWidth: 120 }}>
                   <FormControl fullWidth>
                     <InputLabel id="nivelPermiso">Nivel de Permiso</InputLabel>
                     <Select
                       name="nivel_permiso"
                       labelId="nivelPermiso"
                       id="nivelPermiso"
-                      value={nivel_permiso}
+                      value={values.nivel_permiso}
                       label="Nivel de Permiso"
-                      onChange={handleChange}
+                      onChange={(e) => {
+                        setFieldValue("nivel_permiso", e.target.value);
+                      }}
                       required
                     >
-                      <MenuItem name="nivel_permiso" value="ADM">Administrador</MenuItem>
-                      <MenuItem name="nivel_permiso" value="USR">Usuario</MenuItem>
-                      <MenuItem name="nivel_permiso" value="USRF">Usuario Full</MenuItem>
+                      <MenuItem value="ADM">Administrador</MenuItem>
+                      <MenuItem value="USR">Usuario</MenuItem>
+                      <MenuItem value="USRF">Usuario Full</MenuItem>
                     </Select>
                   </FormControl>
-                </Box> */}
+                </Box>
               </Grid>
             </Grid>
             <Button
