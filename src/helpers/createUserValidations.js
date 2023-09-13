@@ -1,4 +1,4 @@
-export const validations =(values) => {
+ const validations =(values) => {
   let errors = {};
   const soloLetrasEspacios = /^[ a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/; //letras y espacios
   const soloLetras = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/; //letras sin espacios
@@ -53,3 +53,4 @@ export const validations =(values) => {
   }
   return errors;
 }
+export default validations

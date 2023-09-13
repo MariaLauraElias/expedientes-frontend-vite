@@ -1,6 +1,6 @@
-import React from "react";
-import { useContext } from "react";
-import * as Yup from "yup";
+import * as React from "react";
+import { useContext, useState } from "react";
+
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -17,8 +17,7 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import UserContext from "../../contexts/UserContext";
-import { useFormik } from "formik";
-
+import validations from "../../helpers/createUserValidations";
 function Copyright(props) {
   return (
     <Typography
@@ -42,32 +41,34 @@ const defaultTheme = createTheme();
 export default function CrearUsuario() {
   const { createUser } = useContext(UserContext);
 
-  const {handleChange, handleSubmit, errors, values} = useFormik({
-    initialValues:{
-      nombre:"",
-      apellido:"",
-      legajo:"",
-      usuario:"",
-      pass:"",
-      email:"",
-      
-    },
-    validationSchema: Yup.object({
-        nombre: Yup.string().required("Debes ingresar un nombre"),
-        apellido: Yup.string().required("Debes ingresar un apellido"),
-        usuario: Yup.string()
-        .matches(/^\S*$/, 'El usuario no puede contener espacios')
-        .required('El campo usuario es obligatorio'),
-        email: Yup.string().required("Debes ingresar un email").email("Debes ingresar un email válido"),
-        pass: Yup.string().required("Debes ingresar una contraseña").min(8, "La contraseña debe tener al menos 8 caracteres").matches(/\d/,"La contraseña debe contener al menos un número"),
-      }),
-    onSubmit:(values, { resetForm }) => {
-      createUser(values);
-      resetForm();
-    }
-  })
+  const [nivelPermiso, setNivelPermiso] = useState("");
+  const [errors, setErrors] = useState([null]);
 
-  
+  const handleChange = (event) => {
+    setNivelPermiso(event.target.value);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const values = {
+      nombre: data.get("nombre"),
+      apellido: data.get("apellido"),
+      legajo: data.get("legajo"),
+      usuario: data.get("usuario"),
+      nivel_permiso: data.get("nivelPermiso"),
+      activo: 1,
+      mail: data.get("mail"),
+      pass: data.get("pass"),
+      pass2: data.get("pass2"),
+    };
+    setErrors(validations(values));
+    console.log(errors);
+
+    if (!errors) {
+      createUser(values);
+    }
+  };
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container component="main" maxWidth="xs">
@@ -103,10 +104,8 @@ export default function CrearUsuario() {
                   label="Nombre"
                   autoFocus
                   autoComplete="off"
-                  value={values.nombre}
-                  error={errors.nombre? true : false}
+                  error={errors.nombre ? true : false}
                   helperText={errors.nombre}
-                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -118,10 +117,8 @@ export default function CrearUsuario() {
                   label="Apellido"
                   name="apellido"
                   autoComplete="off"
-                  value={values.apellido}
                   error={errors.apellido ? true : false}
                   helperText={errors.apellido}
-                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -191,24 +188,24 @@ export default function CrearUsuario() {
                 />
               </Grid>
               <Grid item xs={12}>
-                {/* <Box sx={{ minWidth: 120 }}>
+                <Box sx={{ minWidth: 120 }}>
                   <FormControl fullWidth>
                     <InputLabel id="nivelPermiso">Nivel de Permiso</InputLabel>
                     <Select
-                      name="nivel_permiso"
+                      name="nivelPermiso"
                       labelId="nivelPermiso"
                       id="nivelPermiso"
-                      value={nivel_permiso}
+                      value={nivelPermiso}
                       label="Nivel de Permiso"
                       onChange={handleChange}
                       required
                     >
-                      <MenuItem name="nivel_permiso" value="ADM">Administrador</MenuItem>
-                      <MenuItem name="nivel_permiso" value="USR">Usuario</MenuItem>
-                      <MenuItem name="nivel_permiso" value="USRF">Usuario Full</MenuItem>
+                      <MenuItem value="ADM">Administrador</MenuItem>
+                      <MenuItem value="USR">Usuario</MenuItem>
+                      <MenuItem value="USRF">Usuario Full</MenuItem>
                     </Select>
                   </FormControl>
-                </Box> */}
+                </Box>
               </Grid>
             </Grid>
             <Button
