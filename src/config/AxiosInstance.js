@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import AuthContext from '../contexts/AuthContext'; 
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000', 
+  baseURL: 'https://localhost:4000', 
   headers: {
     'Content-Type': 'application/json',
     // Otros encabezados si es necesario

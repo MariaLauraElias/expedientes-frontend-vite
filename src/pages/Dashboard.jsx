@@ -22,10 +22,10 @@ import ProtectedRoutesUsr from "../routes/ProtectedRoutesUsr";
 import IngresoExptedieneForm from "../components/IngresoExpedienteForm/IngresoExptedieneForm";
 import NotFound from "../components/Not Found/NotFound";
 import CrearUsuario from "../components/AdminUsuario/CrearUsuario";
-import ListarUsuario from "../components/AdminUsuario/ListarUsuario";
 import Home from "../components/Home/Home";
 import Consulta from '../components/FormularioConsulta/Consulta';
 import NestedList from '../components/NestedList';
+import ListarUsuarios from '../components/AdminUsuario/ListarUsuarios';
 
 const drawerWidth = 240;
 
@@ -185,7 +185,7 @@ export default function Dashboard() {
               path="/listarUsuarios"
               element={
                 <ProtectedRoutesAdm>
-                  <ListarUsuario  />
+                  <ListarUsuarios  />
                 </ProtectedRoutesAdm>
               }
             />

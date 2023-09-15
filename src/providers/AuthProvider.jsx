@@ -6,7 +6,6 @@ import { types } from "../types/types";
 
 const loggedUser = JSON.parse(window.sessionStorage.getItem("loggedUser"));
 const initialState = loggedUser ? loggedUser : null;
-
 export const AuthProvider = ({ children }) => {
 
  const [state, dispatch] = useReducer(authReducer, initialState)
@@ -15,7 +14,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (values) => {
         
       try {
-        const response = await axios.post("http://localhost:3000/login", {
+        const response = await axios.post("https://localhost:4000/login", {
           usuario: values.usuario,
           pass: values.pass,
         });
@@ -38,10 +37,12 @@ export const AuthProvider = ({ children }) => {
   
   const logout = () => {
     window.sessionStorage.removeItem("loggedUser");
+
     dispatch({
       type: types.auth.logoutType,
       payload: null
     })
+    
   };
 
   

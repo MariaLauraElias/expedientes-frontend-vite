@@ -39,10 +39,39 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
+const schema = Yup.object().shape({
+  nombre: Yup.string().required("Debes ingresar un nombre"),
+  apellido: Yup.string().required("Debes ingresar un apellido"),
+  usuario: Yup.string()
+    .trim()
+    .matches(
+      /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/,
+      "El usuario no puede contener espacios"
+    )
+    .required("El campo usuario es obligatorio"),
+  legajo: Yup.number().required("El campo legajo es obligatorio"),
+  mail: Yup.string()
+    .required("Debes ingresar un email")
+    .email("Debes ingresar un email válido"),
+  pass: Yup.string()
+    .required("Debes ingresar una contraseña")
+    .min(8, "La contraseña debe tener al menos 8 caracteres")
+    .matches(/\d/, "La contraseña debe contener al menos un número")
+    .matches(/[a-z]/, "Debe contener al menos una letra minúscula")
+    .matches(/[A-Z]/, "Debe contener al menos una letra mayúscula")
+    .matches(
+      /[!@#$%^&*(),.?":{}|<>]/,
+      "Debe contener al menos un carácter especial"
+    ),
+  pass2: Yup.string()
+    .required("Debes ingresar otra vez la contraseña")
+    .oneOf([Yup.ref("pass"), null], "Las contraseñas no coinciden"),
+})
+
 export default function CrearUsuario() {
   const { createUser } = useContext(UserContext);
 
-  const { handleChange, handleSubmit, errors, values, setFieldValue } =
+  const { handleChange, handleSubmit, errors, values, setFieldValue, touched} =
     useFormik({
       initialValues: {
         nombre: "",
@@ -53,31 +82,37 @@ export default function CrearUsuario() {
         pass2: "",
         mail: "",
         nivel_permiso: "USR",
+        activo: 1,
       },
-      validationSchema: Yup.object({
-        nombre: Yup.string().required("Debes ingresar un nombre"),
-        apellido: Yup.string().required("Debes ingresar un apellido"),
-        usuario: Yup.string()
-          .trim()
-          .matches(
-            /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/,
-            "El usuario no puede contener espacios"
-          )
-          .required("El campo usuario es obligatorio"),
-        mail: Yup.string()
-          .required("Debes ingresar un email")
-          .email("Debes ingresar un email válido"),
-        pass: Yup.string()
-          .required("Debes ingresar una contraseña")
-          .min(8, "La contraseña debe tener al menos 8 caracteres")
-          .matches(/\d/, "La contraseña debe contener al menos un número")
-          .matches(/[a-z]/, 'Debe contener al menos una letra minúscula')
-          .matches(/[A-Z]/, 'Debe contener al menos una letra mayúscula')
-          .matches(/[!@#$%^&*(),.?":{}|<>]/, 'Debe contener al menos un carácter especial'),
-        pass2: Yup.string()
-          .required("Debes ingresar otra vez la contraseña")
-          .oneOf([Yup.ref("pass"), null], "Las contraseñas no coinciden"),  
-      }),
+      validationSchema: schema,
+      //  Yup.object({
+      //   nombre: Yup.string().required("Debes ingresar un nombre"),
+      //   apellido: Yup.string().required("Debes ingresar un apellido"),
+      //   usuario: Yup.string()
+      //     .trim()
+      //     .matches(
+      //       /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/,
+      //       "El usuario no puede contener espacios"
+      //     )
+      //     .required("El campo usuario es obligatorio"),
+      //   legajo: Yup.number().required("El campo legajo es obligatorio"),
+      //   mail: Yup.string()
+      //     .required("Debes ingresar un email")
+      //     .email("Debes ingresar un email válido"),
+      //   pass: Yup.string()
+      //     .required("Debes ingresar una contraseña")
+      //     .min(8, "La contraseña debe tener al menos 8 caracteres")
+      //     .matches(/\d/, "La contraseña debe contener al menos un número")
+      //     .matches(/[a-z]/, "Debe contener al menos una letra minúscula")
+      //     .matches(/[A-Z]/, "Debe contener al menos una letra mayúscula")
+      //     .matches(
+      //       /[!@#$%^&*(),.?":{}|<>]/,
+      //       "Debe contener al menos un carácter especial"
+      //     ),
+      //   pass2: Yup.string()
+      //     .required("Debes ingresar otra vez la contraseña")
+      //     .oneOf([Yup.ref("pass"), null], "Las contraseñas no coinciden"),
+      // }),
       onSubmit: (values, { resetForm }) => {
         createUser(values);
         resetForm();
@@ -111,6 +146,7 @@ export default function CrearUsuario() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
+                autoFocus
                   name="nombre"
                   type="text"
                   required
@@ -119,9 +155,11 @@ export default function CrearUsuario() {
                   label="Nombre"
                   autoComplete="off"
                   value={values.nombre}
-                  error={errors.nombre ? true : false}
-                  helperText={errors.nombre}
+                  
+                  error={touched.nombre && errors.nombre ? true : false}
+                  helperText={touched.nombre && errors.nombre}
                   onChange={handleChange}
+                  
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -134,9 +172,10 @@ export default function CrearUsuario() {
                   name="apellido"
                   autoComplete="off"
                   value={values.apellido}
-                  error={errors.apellido ? true : false}
-                  helperText={errors.apellido}
+                  error={touched.apellido && errors.apellido ? true : false}
+                  helperText={touched.apellido && errors.apellido}
                   onChange={handleChange}
+                  
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -147,12 +186,12 @@ export default function CrearUsuario() {
                   fullWidth
                   id="usuario"
                   label="Usuario"
-                  autoFocus
                   autoComplete="off"
-                  error={errors.usuario ? true : false}
-                  helperText={errors.usuario}
+                  error={touched.usuario && errors.usuario ? true : false}
+                  helperText={touched.usuario && errors.usuario}
                   value={values.usuario}
                   onChange={handleChange}
+                  
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -164,10 +203,11 @@ export default function CrearUsuario() {
                   label="Legajo"
                   name="legajo"
                   autoComplete="off"
-                  error={errors.legajo ? true : false}
-                  helperText={errors.legajo}
+                  error={touched.legajo && errors.legajo ? true : false}
+                  helperText={touched.legajo && errors.legajo}
                   value={values.legajo}
                   onChange={handleChange}
+                 
                 />
               </Grid>
               <Grid item xs={12}>
@@ -179,10 +219,11 @@ export default function CrearUsuario() {
                   name="mail"
                   autoComplete="off"
                   type="email"
-                  error={errors.mail ? true : false}
-                  helperText={errors.mail}
+                  error={touched.mail && errors.mail ? true : false}
+                  helperText={touched.mail && errors.mail}
                   value={values.mail}
                   onChange={handleChange}
+                  
                 />
               </Grid>
               <Grid item xs={12}>
@@ -194,10 +235,11 @@ export default function CrearUsuario() {
                   type="password"
                   id="pass"
                   autoComplete="off"
-                  error={errors.pass ? true : false}
-                  helperText={errors.pass}
+                  error={touched.pass && errors.pass ? true : false}
+                  helperText={touched.pass && errors.pass}
                   value={values.pass}
                   onChange={handleChange}
+                  
                 />
               </Grid>
               <Grid item xs={12}>
@@ -209,10 +251,11 @@ export default function CrearUsuario() {
                   type="password"
                   id="pass2"
                   autoComplete="off"
-                  error={errors.pass2 ? true : false}
-                  helperText={errors.pass2}
+                  error={touched.pass2 && errors.pass2 ? true : false}
+                  helperText={touched.pass2 && errors.pass2}
                   value={values.pass2}
                   onChange={handleChange}
+                  
                 />
               </Grid>
               <Grid item xs={12}>
