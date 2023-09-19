@@ -44,7 +44,7 @@ const rows = [
 ]
 
 export default function ListarUsuarios() {
-  const { state: userList, getAllUsers } = React.useContext(UserContext);
+  const { state , getAllUsers } = React.useContext(UserContext);
   
   React.useEffect(() => {
     getAllUsers();
@@ -54,9 +54,9 @@ export default function ListarUsuarios() {
     <div style={{ height: 400, width: "100%" }}>
       <DataGrid
         getRowId={(row) => row.id_usuario} //con esta linea le digo a data grid que mi id unico es id_usuario, por defecto espera que se llame id
-        rows={userList || rows}
+        rows={state.users || rows}
         columns={columns}
-        loading={!userList}
+        loading={!state.isLoaded}
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 5 },

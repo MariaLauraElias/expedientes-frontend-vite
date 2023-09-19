@@ -1,29 +1,34 @@
 import { types } from "../types/types";
 
-const userReducer = (state =[], action) => {
+const userReducer = (state ={}, action) => {
   switch (action.type) {
 
     case types.user.getAllType:
-      return (    
-        action.payload
-      )
-    case types.user.addType:
-      return [
+      return {
         ...state,
-        action.payload
-      ]
+        users: action.payload.users,
+        isLoaded: action.payload.isLoaded
+      }
+    case types.user.addType:
+      return {
+        ...state,
+        users: action.payload.users,
+        isLoaded: action.payload.isLoaded
+      }
 
     case types.user.updateType:
-      return [
+      return {
         ...state,
-        action.payload
-      ]
+        users: action.payload.users,
+        isLoaded: action.payload.isLoaded
+      }
 
     case types.user.deleteType:
-      return [
+      return {
         ...state,
-        action.payload
-      ]
+        users: action.payload.users,
+        isLoaded: action.payload.isLoaded
+      }
     default:
       return state;
   }

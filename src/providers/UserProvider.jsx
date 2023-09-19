@@ -4,8 +4,10 @@ import userReducer from "../reducers/userReducer";
 import AxiosInstance from "../config/AxiosInstance";
 import { types } from "../types/types";
 
+const initialState = {isLoaded: false, users: []}
+
 export const UserProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(userReducer);
+  const [state, dispatch] = useReducer(userReducer, initialState);
 
   const api = AxiosInstance();
 
@@ -14,7 +16,10 @@ export const UserProvider = ({ children }) => {
       const { data } = await api.get("/usuarios");
       dispatch({
         type: types.user.getAllType,
-        payload: data.usuarios,
+        payload: {
+          isLoaded: true,
+          users: data.usuarios,
+        }
       });
     } catch (error) {
       console.log(error);
@@ -38,6 +43,7 @@ export const UserProvider = ({ children }) => {
         usuario: values.usuario,
         legajo: values.legajo,
         pass: values.pass,
+        pass2: values.pass2,
         mail: values.mail,
         nivel_permiso: values.nivel_permiso,
         activo: values.activo,
@@ -45,7 +51,10 @@ export const UserProvider = ({ children }) => {
       if (response.status === 201) {
         dispatch({
           type: types.user.addType,
-          payload: values,
+          payload: {
+            isLoaded: true,
+            users: values,
+          }
         });
       }
       alert("Usuario creado correctamente");
@@ -69,7 +78,10 @@ export const UserProvider = ({ children }) => {
         });
         dispatch({
           type: types.user.updateType,
-          payload: newState,
+          payload: {
+            isLoaded: true,
+            users: newState,
+          }
         });
       }
       alert("Usuario modificado correctamente");
@@ -92,7 +104,10 @@ export const UserProvider = ({ children }) => {
 
         dispatch({
           type: types.user.deleteType,
-          payload: newUserList,
+          payload: {
+            isLoaded: true,
+            users: newUserList,
+          }
         });
       }
     } catch (error) {

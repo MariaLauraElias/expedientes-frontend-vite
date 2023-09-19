@@ -31,8 +31,8 @@ export default function NestedList() {
     setOpen(!open);
   };
 
-  const { state: user, logout } = useContext(AuthContext);
-  const isAdmin = user && user.nivel_permiso === "ADM" ? true : false;
+  const { state , logout } = useContext(AuthContext);
+  const isAdmin = state.isLogged && state.user.nivel_permiso === "ADM" ? true : false;
 
   //defino aquí estas lineas de estilo porque son dinámicas
   let activeStyle = {
@@ -56,9 +56,9 @@ export default function NestedList() {
         </ListSubheader>
       }
     >
-      {user && (
+      {state.isLogged && (
         <NavLink
-          to={"/"}
+          to={"/dashboard"}
           className={"nav-link"}
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
         >
@@ -70,9 +70,9 @@ export default function NestedList() {
       </ListItemButton>
       </NavLink>
       )}
-      {user && (
+      {state.isLogged && (
         <NavLink
-          to={"/consulta"}
+          to={"/dashboard/consulta"}
           className={"nav-link"}
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
         >
@@ -86,7 +86,7 @@ export default function NestedList() {
       )}
       {isAdmin && (
         <NavLink
-          to={"/agregarexpediente"}
+          to={"/dashboard/agregarexpediente"}
           className={"nav-link"}
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
         >
@@ -110,7 +110,7 @@ export default function NestedList() {
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
         <NavLink
-            to={"/listarUsuarios"}
+            to={"/dashboard/listarUsuarios"}
             className={"nav-link"}
             style={({ isActive }) => (isActive ? activeStyle : undefined)}
           >
@@ -124,7 +124,7 @@ export default function NestedList() {
         </List>
         <List component="div" disablePadding>
         <NavLink
-            to={"/agregarUsuarios"}
+            to={"/dashboard/agregarUsuarios"}
             className={"nav-link"}
             style={({ isActive }) => (isActive ? activeStyle : undefined)}
           >

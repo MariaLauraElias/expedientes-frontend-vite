@@ -2,27 +2,21 @@ import { types } from "../types/types";
 
 const authReducer = (state, action) => {
   switch (action.type) {
-
     case types.auth.loginType:
-      return  {
-
+      return {
         ...state,
         user: action.payload.user,
         isLogged: true,
-        errorMessage: ''
-        //action.payload
-      }
-      
+        errorMessage: "",
+      };
 
     case types.auth.logoutType:
-      return  {
-
+      return {
         ...state,
         user: null,
         isLogged: false,
-        errorMessage: ''
-        //action.payload
-      }
+        errorMessage: "",
+      };
     default:
       return state;
   }

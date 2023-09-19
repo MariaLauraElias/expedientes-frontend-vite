@@ -6,6 +6,7 @@ const IngresoExptedieneForm = () => {
 
   return (
     <>
+    <div>ingresar expte</div>
     </>
 
   );

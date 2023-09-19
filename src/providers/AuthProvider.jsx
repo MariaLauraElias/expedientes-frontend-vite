@@ -4,13 +4,10 @@ import authReducer from "../reducers/authReducer";
 import axios from "axios";
 import { types } from "../types/types";
 
-//const loggedUser = JSON.parse(window.sessionStorage.getItem("loggedUser"));
-//el estado inicial no deberia ser el storage
 
 const initialState = { user: null, isLogged: false, errorMessage: "" };
 
-//const initialState = loggedUser ? loggedUser : null;
-//si uso la estructura del authReducer, en el initialState debo poner la misma estructura con el user y el is logged y el error message
+
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
@@ -20,11 +17,10 @@ export const AuthProvider = ({ children }) => {
         usuario: values.usuario,
         pass: values.pass,
       });
-
-      window.sessionStorage.setItem(
-        "loggedUser",
-        JSON.stringify(response.data)
-      );
+      // window.sessionStorage.setItem(
+      //   "loggedUser",
+      //   JSON.stringify(response.data)
+      // );
       dispatch({
         type: types.auth.loginType,
         payload: {

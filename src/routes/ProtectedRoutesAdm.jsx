@@ -5,11 +5,10 @@ import AuthContext from "../contexts/AuthContext";
 const ProtectedRoutesAdm = ( {children} ) => {
   const {state} = useContext(AuthContext)
   
-  if (state.isLogged && state.user.nivel_permiso === 'ADM'){
-    return children
-  }else{
-    return <Navigate to={'/'} />
-  }
+  return (state.isLogged && state.user.nivel_permiso === 'ADM')?
+  children : <Navigate to="/dashboard" />
 }
 
 export default ProtectedRoutesAdm
+
+

@@ -12,10 +12,10 @@ const instance = axios.create({
 
 //creo una isntancia de axios que tenga como base de datos la url de mi backend
 const AxiosInstance = () => {
-  const { state: user } = useContext(AuthContext); 
+  const { state } = useContext(AuthContext); 
 
-  if (user && user.token) {
-    instance.defaults.headers.common['authorization'] = `Bearer ${user.token}`;
+  if (state.user && state.user.token) {
+    instance.defaults.headers.common['authorization'] = `Bearer ${state.user.token}`;
   } else {
     delete instance.defaults.headers.common['authorization'];
   }

@@ -44,15 +44,15 @@ const schema = Yup.object().shape({
   apellido: Yup.string().required("Debes ingresar un apellido"),
   usuario: Yup.string()
     .trim()
-    .matches(
-      /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/,
-      "El usuario no puede contener espacios"
-    )
+    .matches(/^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/, "El usuario no puede contener espacios")
     .required("El campo usuario es obligatorio"),
   legajo: Yup.number().required("El campo legajo es obligatorio"),
   mail: Yup.string()
     .required("Debes ingresar un email")
-    .email("Debes ingresar un email válido"),
+    .matches(
+      /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+      "Ingresa una dirección de correo electrónico válida"
+    ),
   pass: Yup.string()
     .required("Debes ingresar una contraseña")
     .min(8, "La contraseña debe tener al menos 8 caracteres")
@@ -66,12 +66,12 @@ const schema = Yup.object().shape({
   pass2: Yup.string()
     .required("Debes ingresar otra vez la contraseña")
     .oneOf([Yup.ref("pass"), null], "Las contraseñas no coinciden"),
-})
+});
 
 export default function CrearUsuario() {
   const { createUser } = useContext(UserContext);
 
-  const { handleChange, handleSubmit, errors, values, setFieldValue, touched} =
+  const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
     useFormik({
       initialValues: {
         nombre: "",
@@ -85,35 +85,9 @@ export default function CrearUsuario() {
         activo: 1,
       },
       validationSchema: schema,
-      //  Yup.object({
-      //   nombre: Yup.string().required("Debes ingresar un nombre"),
-      //   apellido: Yup.string().required("Debes ingresar un apellido"),
-      //   usuario: Yup.string()
-      //     .trim()
-      //     .matches(
-      //       /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]+$/,
-      //       "El usuario no puede contener espacios"
-      //     )
-      //     .required("El campo usuario es obligatorio"),
-      //   legajo: Yup.number().required("El campo legajo es obligatorio"),
-      //   mail: Yup.string()
-      //     .required("Debes ingresar un email")
-      //     .email("Debes ingresar un email válido"),
-      //   pass: Yup.string()
-      //     .required("Debes ingresar una contraseña")
-      //     .min(8, "La contraseña debe tener al menos 8 caracteres")
-      //     .matches(/\d/, "La contraseña debe contener al menos un número")
-      //     .matches(/[a-z]/, "Debe contener al menos una letra minúscula")
-      //     .matches(/[A-Z]/, "Debe contener al menos una letra mayúscula")
-      //     .matches(
-      //       /[!@#$%^&*(),.?":{}|<>]/,
-      //       "Debe contener al menos un carácter especial"
-      //     ),
-      //   pass2: Yup.string()
-      //     .required("Debes ingresar otra vez la contraseña")
-      //     .oneOf([Yup.ref("pass"), null], "Las contraseñas no coinciden"),
-      // }),
+
       onSubmit: (values, { resetForm }) => {
+        console.log(values);
         createUser(values);
         resetForm();
       },
@@ -146,7 +120,7 @@ export default function CrearUsuario() {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                autoFocus
+                  autoFocus
                   name="nombre"
                   type="text"
                   required
@@ -155,11 +129,9 @@ export default function CrearUsuario() {
                   label="Nombre"
                   autoComplete="off"
                   value={values.nombre}
-                  
                   error={touched.nombre && errors.nombre ? true : false}
                   helperText={touched.nombre && errors.nombre}
                   onChange={handleChange}
-                  
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -175,7 +147,6 @@ export default function CrearUsuario() {
                   error={touched.apellido && errors.apellido ? true : false}
                   helperText={touched.apellido && errors.apellido}
                   onChange={handleChange}
-                  
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -191,7 +162,6 @@ export default function CrearUsuario() {
                   helperText={touched.usuario && errors.usuario}
                   value={values.usuario}
                   onChange={handleChange}
-                  
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -207,7 +177,6 @@ export default function CrearUsuario() {
                   helperText={touched.legajo && errors.legajo}
                   value={values.legajo}
                   onChange={handleChange}
-                 
                 />
               </Grid>
               <Grid item xs={12}>
@@ -223,7 +192,6 @@ export default function CrearUsuario() {
                   helperText={touched.mail && errors.mail}
                   value={values.mail}
                   onChange={handleChange}
-                  
                 />
               </Grid>
               <Grid item xs={12}>
@@ -239,7 +207,6 @@ export default function CrearUsuario() {
                   helperText={touched.pass && errors.pass}
                   value={values.pass}
                   onChange={handleChange}
-                  
                 />
               </Grid>
               <Grid item xs={12}>
@@ -255,7 +222,6 @@ export default function CrearUsuario() {
                   helperText={touched.pass2 && errors.pass2}
                   value={values.pass2}
                   onChange={handleChange}
-                  
                 />
               </Grid>
               <Grid item xs={12}>
