@@ -3,9 +3,9 @@ import { useContext } from "react";
 import AuthContext from "../contexts/AuthContext";
 
 const ProtectedRoutesAdm = ( {children} ) => {
-  const {state: user} = useContext(AuthContext)
+  const {state} = useContext(AuthContext)
   
-  if (user && user.nivel_permiso === 'ADM'){
+  if (state.isLogged && state.user.nivel_permiso === 'ADM'){
     return children
   }else{
     return <Navigate to={'/'} />

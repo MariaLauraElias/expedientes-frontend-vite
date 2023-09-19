@@ -1,12 +1,12 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../contexts/AuthContext";
 
 const ProtectedRoutesUsr = ( {children} ) => {
-  const {state: user} = useContext(AuthContext)
+  const {state} = useContext(AuthContext)
   
-  if (user && (user.nivel_permiso === 'USR' || user.nivel_permiso === 'ADM' || user.nivel_permiso === 'USRF')){
-    return children
+  if (state.isLogged ){
+    return children? children : <Outlet />
   }else{
     return <Navigate to={'/'} />
   }

@@ -5,13 +5,13 @@ import LoginForm from "./components/FormularioLogin/LoginForm";
 import Dashboard from "./pages/Dashboard";
 
 function App() {
-  const { state: loggedUser } = useContext(AuthContext);
+  const { state } = useContext(AuthContext);
 
   return (
     <>
       <BrowserRouter>
         <Routes>
-          {!loggedUser ? (
+          {!state.isLogged ? (
             <Route path="/" element={<LoginForm />} />
           ) : (
             <Route path="/*" element={<Dashboard />} />
