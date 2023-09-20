@@ -6,14 +6,16 @@ import { types } from "../types/types";
 
 
 const initialState = { user: null, isLogged: false, errorMessage: "" };
+const baseUrl = import.meta.env.VITE_API_URL;
 
+export const AuthConsumer = AuthContext.Consumer;
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   const login = async (values) => {
     try {
-      const response = await axios.post("https://localhost:4000/login", {
+      const response = await axios.post(baseUrl + "/login", {
         usuario: values.usuario,
         pass: values.pass,
       });

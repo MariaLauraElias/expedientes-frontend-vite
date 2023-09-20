@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { useContext } from 'react';
 import AuthContext from '../contexts/AuthContext'; 
-
+const baseUrl = import.meta.env.VITE_API_URL;
 const instance = axios.create({
-  baseURL: 'https://localhost:4000', 
+  baseURL: baseUrl, 
   headers: {
     'Content-Type': 'application/json',
     // Otros encabezados si es necesario

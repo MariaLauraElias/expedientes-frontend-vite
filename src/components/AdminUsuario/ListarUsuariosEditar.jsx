@@ -1,92 +1,41 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
+import { useContext, useState, useEffect } from "react";
+import UserContext from "../../contexts/UserContext";
+import Box from "@mui/material/Box";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SaveIcon from "@mui/icons-material/Save";
+import CancelIcon from "@mui/icons-material/Close";
 import {
   GridRowModes,
   DataGrid,
-  GridToolbarContainer,
   GridActionsCellItem,
   GridRowEditStopReasons,
-} from '@mui/x-data-grid';
-import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
-  randomArrayItem,
-} from '@mui/x-data-grid-generator';
+} from "@mui/x-data-grid";
 
-const roles = ['Market', 'Finance', 'Development'];
-const randomRole = () => {
-  return randomArrayItem(roles);
-};
-
-const initialRows = [
+const rows = [
   {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
+    id_usuario: 0,
+    nombre: "Esperando datos...",
+    apellido: "Esperando datos...",
+    usuario: "Esperando datos...",
+    legajo: 1234,
+    mail: "Esperando datos...",
+    activo: 1,
+    nivel_permiso: 1,
   },
 ];
 
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
-
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-  );
-}
 
 export default function ListarUsuariosEditar() {
-  const [rows, setRows] = React.useState(initialRows);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+
+  const { state, getAllUsers } = useContext(UserContext);
+  useEffect(() => {
+    getAllUsers();
+  }, [state.isLoaded]);
+ 
+
+  const [rows, setRows] = useState([]);
+  const [rowModesModel, setRowModesModel] = useState({});
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -95,6 +44,7 @@ export default function ListarUsuariosEditar() {
   };
 
   const handleEditClick = (id) => () => {
+    console.log(id);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
@@ -103,6 +53,7 @@ export default function ListarUsuariosEditar() {
   };
 
   const handleDeleteClick = (id) => () => {
+    console.log(id);
     setRows(rows.filter((row) => row.id !== id));
   };
 
@@ -129,38 +80,60 @@ export default function ListarUsuariosEditar() {
   };
 
   const columns = [
-    { field: 'name', headerName: 'Name', width: 180, editable: true },
+    { field: "id_usuario", headerName: "ID", width: 30 },
+    { field: "nombre", headerName: "Nombre", width: 150, editable: true },
+    { field: "apellido", headerName: "Apellido", width: 150, editable: true },
+    { field: "usuario", headerName: "Usuario", width: 130, editable: true },
     {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 80,
-      align: 'left',
-      headerAlign: 'left',
+      field: "legajo",
+      headerName: "Legajo",
+      type: "number",
+      width: 90,
+      align: "right",
+      headerAlign: "left",
       editable: true,
     },
+    { field: "mail", headerName: "Mail", width: 150, editable: true },
     {
-      field: 'joinDate',
-      headerName: 'Join date',
-      type: 'date',
-      width: 180,
+      field: "activo",
+      headerName: "Activo",
+      type: "boolean",
+      width: 90,
       editable: true,
+      valueGetter: (params) => {
+        if (params.value == 1) {
+          return true;
+        } else if (params.value == 0) {
+          return false;
+          // Convierte el 1 en true y el 0 en false
+        }
+      },
     },
     {
-      field: 'role',
-      headerName: 'Department',
-      width: 220,
+      field: "nivel_permiso",
+      headerName: "Nivel de permiso",
+      type: "singleSelect",
+      valueOptions: ["USR", "USRF", "ADM"],
+      width: 130,
       editable: true,
-      type: 'singleSelect',
-      valueOptions: ['Market', 'Finance', 'Development'],
     },
+   
+    // {
+    //   field: 'role',
+    //   headerName: 'Department',
+    //   width: 220,
+    //   editable: true,
+    //   type: 'singleSelect',
+    //   valueOptions: ['Market', 'Finance', 'Development'],
+    // },
     {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
+      field: "actions",
+      type: "actions",
+      headerName: "Acciones",
       width: 100,
-      cellClassName: 'actions',
+      cellClassName: "actions",
       getActions: ({ id }) => {
+        
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
 
         if (isInEditMode) {
@@ -169,7 +142,7 @@ export default function ListarUsuariosEditar() {
               icon={<SaveIcon />}
               label="Save"
               sx={{
-                color: 'primary.main',
+                color: "primary.main",
               }}
               onClick={handleSaveClick(id)}
             />,
@@ -206,29 +179,31 @@ export default function ListarUsuariosEditar() {
     <Box
       sx={{
         height: 500,
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary',
+        width: "100%",
+        "& .actions": {
+          color: "text.secondary",
         },
-        '& .textPrimary': {
-          color: 'text.primary',
+        "& .textPrimary": {
+          color: "text.primary",
         },
       }}
     >
       <DataGrid
-        rows={rows}
+        getRowId={(row) => row.id_usuario} //con esta linea le digo a data grid que mi id unico es id_usuario, por defecto espera que se llame id
+        rows={state.users || rows}
         columns={columns}
+        loading={!state.isLoaded}
         editMode="row"
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
+        // slots={{
+        //   toolbar: EditToolbar,
+        // }}
+        // slotProps={{
+        //   toolbar: { setRows, setRowModesModel },
+        // }}
       />
     </Box>
   );

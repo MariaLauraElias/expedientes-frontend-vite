@@ -14,6 +14,7 @@ export const UserProvider = ({ children }) => {
   const getAllUsers = async () => {
     try {
       const { data } = await api.get("/usuarios");
+      console.log(data.usuarios)
       dispatch({
         type: types.user.getAllType,
         payload: {

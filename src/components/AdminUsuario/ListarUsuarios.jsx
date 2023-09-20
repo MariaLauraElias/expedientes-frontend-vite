@@ -3,7 +3,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import UserContext from "../../contexts/UserContext";
 
 const columns = [
-  { field: "id_usuario", headerName: "ID", width: 30},
+  { field: "id_usuario", headerName: "ID", width: 30 },
   { field: "nombre", headerName: "Nombre", width: 130, editable: true },
   { field: "apellido", headerName: "Apellido", width: 130, editable: true },
   { field: "usuario", headerName: "Usuario", width: 130, editable: true },
@@ -12,6 +12,8 @@ const columns = [
     headerName: "Legajo",
     type: "number",
     width: 90,
+    align: "right",
+    headerAlign: "left",
     editable: true,
   },
   { field: "mail", headerName: "Mail", width: 130, editable: true },
@@ -32,20 +34,29 @@ const columns = [
   {
     field: "nivel_permiso",
     headerName: "Nivel de permiso",
-    type: 'singleSelect',
-    valueOptions: ['USR', 'USRF', 'ADM'],
+    type: "singleSelect",
+    valueOptions: ["USR", "USRF", "ADM"],
     width: 90,
     editable: true,
   },
 ];
 
 const rows = [
-  {id_usuario: 0, nombre: "Esperando datos...", apellido: "Esperando datos...", usuario: "Esperando datos...", legajo: 1234, mail: "Esperando datos...", activo: 1, nivel_permiso: 1}
-]
+  {
+    id_usuario: 0,
+    nombre: "Esperando datos...",
+    apellido: "Esperando datos...",
+    usuario: "Esperando datos...",
+    legajo: 1234,
+    mail: "Esperando datos...",
+    activo: 1,
+    nivel_permiso: 1,
+  },
+];
 
 export default function ListarUsuarios() {
-  const { state , getAllUsers } = React.useContext(UserContext);
-  
+  const { state, getAllUsers } = React.useContext(UserContext);
+
   React.useEffect(() => {
     getAllUsers();
   }, []);
