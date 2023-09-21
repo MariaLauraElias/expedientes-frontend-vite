@@ -24,7 +24,7 @@ import LogoutIcon from "@mui/icons-material/Logout";
 
 
 
-export default function NestedList() {
+export default function NavLateral() {
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
@@ -58,7 +58,7 @@ export default function NestedList() {
     >
       {state.isLogged && (
         <NavLink
-          to={"/dashboard"}
+          to={"/"}
           className={"nav-link"}
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
         >
@@ -72,7 +72,7 @@ export default function NestedList() {
       )}
       {state.isLogged && (
         <NavLink
-          to={"/dashboard/consulta"}
+          to={"/consulta"}
           className={"nav-link"}
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
         >
@@ -86,7 +86,7 @@ export default function NestedList() {
       )}
       {isAdmin && (
         <NavLink
-          to={"/dashboard/agregarexpediente"}
+          to={"/agregarexpediente"}
           className={"nav-link"}
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
         >
@@ -110,7 +110,7 @@ export default function NestedList() {
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
         <NavLink
-            to={"/dashboard/listarUsuarios"}
+            to={"/listarUsuarios"}
             className={"nav-link"}
             style={({ isActive }) => (isActive ? activeStyle : undefined)}
           >
@@ -124,7 +124,7 @@ export default function NestedList() {
         </List>
         <List component="div" disablePadding>
         <NavLink
-            to={"/dashboard/agregarUsuarios"}
+            to={"/agregarUsuarios"}
             className={"nav-link"}
             style={({ isActive }) => (isActive ? activeStyle : undefined)}
           >

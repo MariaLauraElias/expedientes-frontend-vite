@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import PublicRoutes from "./PublicRoutes";
 import PrivateRoutes from "./PrivateRoutes";
-import Dashboard from "../layouts/Dashboard";
+import GeneralLayout from "../layouts/GeneralLayout";
 import LoginForm from "../layouts/LoginForm";
 
 const AppRoutes = () => {
@@ -11,7 +11,7 @@ const AppRoutes = () => {
       <Routes>
         <Route
         index={true}
-          path="/"
+          path="/auth"
           element={
             <PublicRoutes>
               <LoginForm />
@@ -19,10 +19,10 @@ const AppRoutes = () => {
           }
         />
         <Route
-          path="/dashboard/*"
+          path="/*"
           element={
             <PrivateRoutes>
-              <Dashboard />
+              <GeneralLayout />
             </PrivateRoutes>
           }
         />

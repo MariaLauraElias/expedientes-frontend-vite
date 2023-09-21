@@ -23,7 +23,7 @@ import NotFound from "../components/Not Found/NotFound";
 import CrearUsuario from "../components/AdminUsuario/CrearUsuario";
 import Home from "../components/Home/Home";
 import Consulta from "../components/FormularioConsulta/Consulta";
-import NestedList from "../components/NestedList";
+import NavLateral from "../components/NavLateral";
 import ListarUsuariosEditar from "../components/AdminUsuario/ListarUsuariosEditar";
 
 const drawerWidth = 240;
@@ -75,7 +75,7 @@ const Drawer = styled(MuiDrawer, {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function Dashboard() {
+export default function GeneralLayout() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -134,7 +134,7 @@ export default function Dashboard() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            <NestedList />
+            <NavLateral />
             <Divider sx={{ my: 1 }} />
           </List>
         </Drawer>

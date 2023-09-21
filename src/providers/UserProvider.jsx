@@ -4,7 +4,7 @@ import userReducer from "../reducers/userReducer";
 import AxiosInstance from "../config/AxiosInstance";
 import { types } from "../types/types";
 
-const initialState = {isLoaded: false, users: []}
+const initialState = { isLoaded: false, users: [] };
 
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
@@ -14,13 +14,12 @@ export const UserProvider = ({ children }) => {
   const getAllUsers = async () => {
     try {
       const { data } = await api.get("/usuarios");
-      console.log(data.usuarios)
       dispatch({
         type: types.user.getAllType,
         payload: {
           isLoaded: true,
           users: data.usuarios,
-        }
+        },
       });
     } catch (error) {
       console.log(error);
@@ -55,7 +54,7 @@ export const UserProvider = ({ children }) => {
           payload: {
             isLoaded: true,
             users: values,
-          }
+          },
         });
       }
       alert("Usuario creado correctamente");
@@ -64,6 +63,8 @@ export const UserProvider = ({ children }) => {
     }
   };
   const updateUser = async (id, values) => {
+    console.log(id);
+    console.log(values);
     try {
       const response = await api.patch("/usuarios", {
         ...values,
@@ -71,18 +72,15 @@ export const UserProvider = ({ children }) => {
       });
 
       if (response.status === 200) {
-        const newState = state.map((user) => {
-          if (user.id_usuario === id) {
-            return { ...user, ...values };
-          }
-          return state;
-        });
+
+        const newState = getAllUsers();
+
         dispatch({
           type: types.user.updateType,
           payload: {
             isLoaded: true,
             users: newState,
-          }
+          },
         });
       }
       alert("Usuario modificado correctamente");
@@ -99,7 +97,7 @@ export const UserProvider = ({ children }) => {
         },
       });
       if (response.status === 200) {
-        const newUserList = state.filter((user) => {
+        const newUserList = state.users.filter((user) => {
           return user.id_usuario !== id;
         });
 
@@ -108,7 +106,7 @@ export const UserProvider = ({ children }) => {
           payload: {
             isLoaded: true,
             users: newUserList,
-          }
+          },
         });
       }
     } catch (error) {

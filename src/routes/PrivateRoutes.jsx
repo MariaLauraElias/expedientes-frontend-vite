@@ -5,7 +5,7 @@ import AuthContext from '../contexts/AuthContext';
 const PrivateRoutes = ({children}) => {
   const { state } = useContext(AuthContext);
   return (state.isLogged)?
-     children : <Navigate to="/" />
+     children : <Navigate to="/auth" />
 }
 
 export default PrivateRoutes

@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
+import KeyOutlinedIcon from '@mui/icons-material/KeyOutlined';
 import CancelIcon from "@mui/icons-material/Close";
 import {
   GridRowModes,
@@ -12,23 +13,10 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 
-const rows = [
-  {
-    id_usuario: 0,
-    nombre: "Esperando datos...",
-    apellido: "Esperando datos...",
-    usuario: "Esperando datos...",
-    legajo: 1234,
-    mail: "Esperando datos...",
-    activo: 1,
-    nivel_permiso: 1,
-  },
-];
-
 
 export default function ListarUsuariosEditar() {
 
-  const { state, getAllUsers } = useContext(UserContext);
+  const { state, getAllUsers, deleteUser, updateUser } = useContext(UserContext);
   useEffect(() => {
     getAllUsers();
   }, [state.isLoaded]);
@@ -44,7 +32,6 @@ export default function ListarUsuariosEditar() {
   };
 
   const handleEditClick = (id) => () => {
-    console.log(id);
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
 
@@ -53,8 +40,10 @@ export default function ListarUsuariosEditar() {
   };
 
   const handleDeleteClick = (id) => () => {
-    console.log(id);
-    setRows(rows.filter((row) => row.id !== id));
+
+    
+    deleteUser(id);
+  
   };
 
   const handleCancelClick = (id) => () => {
@@ -72,7 +61,14 @@ export default function ListarUsuariosEditar() {
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
+    
+    const newRowOk = {
+      ...newRow,
+      activo: newRow.activo ? 1 : 0,
+    }
+    //pasar el updateUser con el id y el newRow
+    updateUser(newRowOk.id_usuario, newRowOk);
+    return newRowOk;
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
@@ -117,15 +113,6 @@ export default function ListarUsuariosEditar() {
       width: 130,
       editable: true,
     },
-   
-    // {
-    //   field: 'role',
-    //   headerName: 'Department',
-    //   width: 220,
-    //   editable: true,
-    //   type: 'singleSelect',
-    //   valueOptions: ['Market', 'Finance', 'Development'],
-    // },
     {
       field: "actions",
       type: "actions",
@@ -170,6 +157,12 @@ export default function ListarUsuariosEditar() {
             onClick={handleDeleteClick(id)}
             color="inherit"
           />,
+          <GridActionsCellItem
+            icon={<KeyOutlinedIcon />}
+            label="EditPass"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />
         ];
       },
     },
@@ -190,7 +183,7 @@ export default function ListarUsuariosEditar() {
     >
       <DataGrid
         getRowId={(row) => row.id_usuario} //con esta linea le digo a data grid que mi id unico es id_usuario, por defecto espera que se llame id
-        rows={state.users || rows}
+        rows={state.users }
         columns={columns}
         loading={!state.isLoaded}
         editMode="row"
@@ -198,13 +191,13 @@ export default function ListarUsuariosEditar() {
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        // slots={{
-        //   toolbar: EditToolbar,
-        // }}
-        // slotProps={{
-        //   toolbar: { setRows, setRowModesModel },
-        // }}
+       
       />
     </Box>
   );
 }
+
+
+
+
+
