@@ -5,7 +5,7 @@ import AxiosInstance from "../config/AxiosInstance";
 import { types } from "../types/types";
 
 const initialState = { isLoaded: false, users: [] };
-
+//queda pendiente manejar el estado de los mensajes de errores
 export const UserProvider = ({ children }) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
 
@@ -63,8 +63,6 @@ export const UserProvider = ({ children }) => {
     }
   };
   const updateUser = async (id, values) => {
-    console.log(id);
-    console.log(values);
     try {
       const response = await api.patch("/usuarios", {
         ...values,
@@ -72,8 +70,13 @@ export const UserProvider = ({ children }) => {
       });
 
       if (response.status === 200) {
-
-        const newState = getAllUsers();
+        const newState = state.users.map((user) => {
+          if (user.id_usuario === id) {
+            return { ...values, id_usuario: id };
+          } else {
+            return user;
+          }
+        });
 
         dispatch({
           type: types.user.updateType,

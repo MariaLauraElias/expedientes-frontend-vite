@@ -24,7 +24,7 @@ import CrearUsuario from "../components/AdminUsuario/CrearUsuario";
 import Home from "../components/Home/Home";
 import Consulta from "../components/FormularioConsulta/Consulta";
 import NavLateral from "../components/NavLateral";
-import ListarUsuariosEditar from "../components/AdminUsuario/ListarUsuariosEditar";
+import ListarUsuarios from "../components/AdminUsuario/ListarUsuarios";
 
 const drawerWidth = 240;
 
@@ -168,7 +168,7 @@ export default function GeneralLayout() {
                 path="/listarUsuarios"
                 element={
                   <ProtectedRoutesAdm>
-                    <ListarUsuariosEditar />
+                    <ListarUsuarios />
                   </ProtectedRoutesAdm>
                 }
               />
