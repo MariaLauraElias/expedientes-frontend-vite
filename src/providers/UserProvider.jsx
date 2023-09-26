@@ -118,6 +118,45 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const editarPass = async (id, values) => {
+    try {
+      const response = await api.patch("/usuarios/changepsw", {
+        ...values,
+        id_usuario: id,
+      });
+      if (response.status === 200) {
+        dispatch({
+          type: types.user.editPass,
+          payload: {
+            isLoaded: true,
+          },
+        });
+        alert("Contraseña modificada correctamente");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const editarPassPropia = async (values) => {
+    try {
+      const response = await api.patch("/usuarios/changeselfpsw", {
+        ...values,
+      });
+      if (response.status === 200) {
+        dispatch({
+          type: types.user.editPassOwn,
+          payload: {
+            isLoaded: true,
+          },
+        });
+        alert("Contraseña modificada correctamente");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -127,6 +166,8 @@ export const UserProvider = ({ children }) => {
         updateUser,
         createUser,
         deleteUser,
+        editarPass,
+        editarPassPropia,
       }}
     >
       {children}

@@ -25,6 +25,8 @@ import Home from "../components/Home/Home";
 import Consulta from "../components/FormularioConsulta/Consulta";
 import NavLateral from "../components/NavLateral";
 import ListarUsuarios from "../components/AdminUsuario/ListarUsuarios";
+import EditarPass from "../components/AdminUsuario/EditarPass";
+import EditarPassPropia from "../components/AdminUsuario/EditarPassPropia";
 
 const drawerWidth = 240;
 
@@ -156,6 +158,7 @@ export default function GeneralLayout() {
               <Route path="/" element={<Home />} />
 
               <Route path="/consulta" element={<Consulta />} />
+              <Route path="/editarPassPropia" element={<EditarPassPropia />} />
               <Route
                 path="/agregarexpediente"
                 element={
@@ -169,6 +172,14 @@ export default function GeneralLayout() {
                 element={
                   <ProtectedRoutesAdm>
                     <ListarUsuarios />
+                  </ProtectedRoutesAdm>
+                }
+              />
+              <Route
+                path="/editarPass/:id"
+                element={
+                  <ProtectedRoutesAdm>
+                    <EditarPass />
                   </ProtectedRoutesAdm>
                 }
               />

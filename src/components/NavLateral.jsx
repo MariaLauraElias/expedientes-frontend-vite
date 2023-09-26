@@ -1,28 +1,25 @@
-import * as React from 'react';
-import { useContext } from 'react';
-import { NavLink, Navigate} from "react-router-dom";
+import * as React from "react";
+import { useContext } from "react";
+import { NavLink, Navigate } from "react-router-dom";
 
-import AuthContext from '../contexts/AuthContext';
-import ListSubheader from '@mui/material/ListSubheader';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Collapse from '@mui/material/Collapse';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
+import AuthContext from "../contexts/AuthContext";
+import ListSubheader from "@mui/material/ListSubheader";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-
+import LockResetOutlinedIcon from "@mui/icons-material/LockResetOutlined";
 import FolderIcon from "@mui/icons-material/Folder";
 import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import PersonIcon from "@mui/icons-material/Person";
 import GroupIcon from "@mui/icons-material/Group";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
-
-
-
-
+import UserContext from "../contexts/UserContext";
 
 export default function NavLateral() {
   const [open, setOpen] = React.useState(true);
@@ -31,8 +28,10 @@ export default function NavLateral() {
     setOpen(!open);
   };
 
-  const { state , logout } = useContext(AuthContext);
-  const isAdmin = state.isLogged && state.user.nivel_permiso === "ADM" ? true : false;
+  const { state, logout } = useContext(AuthContext);
+  const { editPassOwn } = useContext(UserContext);
+  const isAdmin =
+    state.isLogged && state.user.nivel_permiso === "ADM" ? true : false;
 
   //defino aquí estas lineas de estilo porque son dinámicas
   let activeStyle = {
@@ -47,7 +46,7 @@ export default function NavLateral() {
 
   return (
     <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
+      sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
@@ -62,13 +61,13 @@ export default function NavLateral() {
           className={"nav-link"}
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
         >
-      <ListItemButton>
-        <ListItemIcon>
-          <DashboardIcon />
-        </ListItemIcon>
-        <ListItemText primary="H.L.T." />
-      </ListItemButton>
-      </NavLink>
+          <ListItemButton>
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
+            <ListItemText primary="H.L.T." />
+          </ListItemButton>
+        </NavLink>
       )}
       {state.isLogged && (
         <NavLink
@@ -76,13 +75,13 @@ export default function NavLateral() {
           className={"nav-link"}
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
         >
-      <ListItemButton>
-        <ListItemIcon>
-          <FolderIcon />
-        </ListItemIcon>
-        <ListItemText primary="Consulta" />
-      </ListItemButton>
-      </NavLink>
+          <ListItemButton>
+            <ListItemIcon>
+              <FolderIcon />
+            </ListItemIcon>
+            <ListItemText primary="Consulta" />
+          </ListItemButton>
+        </NavLink>
       )}
       {isAdmin && (
         <NavLink
@@ -90,54 +89,68 @@ export default function NavLateral() {
           className={"nav-link"}
           style={({ isActive }) => (isActive ? activeStyle : undefined)}
         >
-      <ListItemButton>
-        <ListItemIcon>
-          <CreateNewFolderIcon />
-        </ListItemIcon>
-        <ListItemText primary="Agregar Expte." />
-      </ListItemButton>
-      </NavLink>
+          <ListItemButton>
+            <ListItemIcon>
+              <CreateNewFolderIcon />
+            </ListItemIcon>
+            <ListItemText primary="Agregar Expte." />
+          </ListItemButton>
+        </NavLink>
       )}
       {isAdmin && (
         <>
-      <ListItemButton onClick={handleClick}>
-        <ListItemIcon>
-          <PersonIcon />
-        </ListItemIcon>
-        <ListItemText primary="Admin. Usuarios" />
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-        <NavLink
-            to={"/listarUsuarios"}
-            className={"nav-link"}
-            style={({ isActive }) => (isActive ? activeStyle : undefined)}
-          >
-          <ListItemButton sx={{ pl: 4 }}>
+          <ListItemButton onClick={handleClick}>
             <ListItemIcon>
-              <GroupIcon />
+              <PersonIcon />
             </ListItemIcon>
-            <ListItemText primary="Listar Usuarios" />
+            <ListItemText primary="Admin. Usuarios" />
+            {open ? <ExpandLess /> : <ExpandMore />}
           </ListItemButton>
-          </NavLink>
-        </List>
-        <List component="div" disablePadding>
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <List component="div" disablePadding>
+              <NavLink
+                to={"/listarUsuarios"}
+                className={"nav-link"}
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                    <GroupIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Listar Usuarios" />
+                </ListItemButton>
+              </NavLink>
+            </List>
+            <List component="div" disablePadding>
+              <NavLink
+                to={"/agregarUsuarios"}
+                className={"nav-link"}
+                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+              >
+                <ListItemButton sx={{ pl: 4 }}>
+                  <ListItemIcon>
+                    <PersonAddIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Agregar Usuario" />
+                </ListItemButton>
+              </NavLink>
+            </List>
+          </Collapse>
+        </>
+      )}
+      {state.isLogged && (
         <NavLink
-            to={"/agregarUsuarios"}
-            className={"nav-link"}
-            style={({ isActive }) => (isActive ? activeStyle : undefined)}
-          >
-          <ListItemButton sx={{ pl: 4 }}>
+          to={"/editarPassPropia"}
+          className={"nav-link"}
+          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+        >
+          <ListItemButton>
             <ListItemIcon>
-              <PersonAddIcon />
+              <LockResetOutlinedIcon />
             </ListItemIcon>
-            <ListItemText primary="Agregar Usuario" />
+            <ListItemText primary="Editar contraseña" />
           </ListItemButton>
-          </NavLink>
-        </List>
-      </Collapse>
-      </>
+        </NavLink>
       )}
       <ListItemButton onClick={onLogout}>
         <ListItemIcon>
@@ -146,6 +159,5 @@ export default function NavLateral() {
         <ListItemText primary="Cerrar Sesión" />
       </ListItemButton>
     </List>
-
   );
 }

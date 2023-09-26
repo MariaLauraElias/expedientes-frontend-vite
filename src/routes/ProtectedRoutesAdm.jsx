@@ -6,7 +6,7 @@ const ProtectedRoutesAdm = ( {children} ) => {
   const {state} = useContext(AuthContext)
   
   return (state.isLogged && state.user.nivel_permiso === 'ADM')?
-  children : <Navigate to="/dashboard" />
+  children : <Navigate to="/" />
 }
 
 export default ProtectedRoutesAdm

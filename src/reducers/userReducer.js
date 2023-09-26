@@ -29,6 +29,16 @@ const userReducer = (state ={}, action) => {
         users: action.payload.users,
         isLoaded: action.payload.isLoaded
       }
+    case types.user.editPass:
+      return{
+        ...state,
+        isLoaded: action.payload.isLoaded
+      }
+      case types.user.editPassOwn:
+      return{
+        ...state,
+        isLoaded: action.payload.isLoaded
+      }
     default:
       return state;
   }

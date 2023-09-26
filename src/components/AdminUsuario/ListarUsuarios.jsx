@@ -20,6 +20,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 import CancelIcon from "@mui/icons-material/Close";
+import { NavLink } from "react-router-dom";
 
 const useFakeMutation = () => {
   return useCallback(
@@ -65,7 +66,8 @@ function computeMutation(newRow, oldRow) {
 }
 
 export default function ListarUsuarios() {
-  const { state, getAllUsers, updateUser, deleteUser } = useContext(UserContext);
+  const { state, getAllUsers, updateUser, deleteUser } =
+    useContext(UserContext);
 
   const [rows, setRows] = useState([]);
   const [rowModesModel, setRowModesModel] = useState({});
@@ -195,11 +197,11 @@ export default function ListarUsuarios() {
 
   const [open, setOpen] = useState(false);
   const [idToDelete, setIdToDelete] = useState(null);
-  const handleDeleteClick = (id) => () => { 
+  const handleDeleteClick = (id) => () => {
     setOpen(true);
     setIdToDelete(id);
-    renderConfirmDelete()
-  }
+    renderConfirmDelete();
+  };
   const renderConfirmDelete = () => {
     if (!open) {
       return null;
@@ -215,10 +217,24 @@ export default function ListarUsuarios() {
           ¿Está seguro que quiere eliminar el usuario?
         </DialogContent>
         <DialogActions>
-          <Button ref={noButtonRef} onClick={() => {setOpen(false); setIdToDelete(null)}}>
+          <Button
+            ref={noButtonRef}
+            onClick={() => {
+              setOpen(false);
+              setIdToDelete(null);
+            }}
+          >
             No
           </Button>
-          <Button onClick={()=>{deleteUser(idToDelete); setOpen(false); setIdToDelete(null)}}>Si</Button>
+          <Button
+            onClick={() => {
+              deleteUser(idToDelete);
+              setOpen(false);
+              setIdToDelete(null);
+            }}
+          >
+            Si
+          </Button>
         </DialogActions>
       </Dialog>
     );
@@ -304,12 +320,13 @@ export default function ListarUsuarios() {
             onClick={handleDeleteClick(id)}
             color="inherit"
           />,
-          <GridActionsCellItem
-            icon={<KeyOutlinedIcon />}
-            label="EditPass"
-            onClick={() => setOpen(true)}
-            color="inherit"
-          />,
+          <NavLink to={`/editarPass/${id}`}>
+            <GridActionsCellItem
+              icon={<KeyOutlinedIcon />}
+              label="EditPass"
+              color="black"
+            />
+          </NavLink>,
         ];
       },
     },
