@@ -5,6 +5,7 @@ import {
   DataGrid,
   GridActionsCellItem,
   GridRowEditStopReasons,
+  esES
 } from "@mui/x-data-grid";
 
 import Snackbar from "@mui/material/Snackbar";
@@ -21,6 +22,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import KeyOutlinedIcon from "@mui/icons-material/KeyOutlined";
 import CancelIcon from "@mui/icons-material/Close";
 import { NavLink } from "react-router-dom";
+
 
 const useFakeMutation = () => {
   return useCallback(
@@ -290,7 +292,7 @@ export default function ListarUsuarios() {
           return [
             <GridActionsCellItem
               icon={<SaveIcon />}
-              label="Save"
+              label="Guardar"
               sx={{
                 color: "primary.main",
               }}
@@ -298,7 +300,7 @@ export default function ListarUsuarios() {
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
-              label="Cancel"
+              label="Cancelar"
               className="textPrimary"
               onClick={handleCancelClick(id)}
               color="inherit"
@@ -309,21 +311,21 @@ export default function ListarUsuarios() {
         return [
           <GridActionsCellItem
             icon={<EditIcon />}
-            label="Edit"
+            label="Editar"
             className="textPrimary"
             onClick={handleEditClick(id)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
-            label="Delete"
+            label="Borrar"
             onClick={handleDeleteClick(id)}
             color="inherit"
           />,
           <NavLink to={`/editarPass/${id}`}>
             <GridActionsCellItem
               icon={<KeyOutlinedIcon />}
-              label="EditPass"
+              label="Editar contraseña"
               color="black"
             />
           </NavLink>,
@@ -333,26 +335,29 @@ export default function ListarUsuarios() {
   ];
 
   return (
-    <div style={{ height: 400, width: "100%" }}>
-      {renderConfirmDialog()}
-      {renderConfirmDelete()}
+    
+      <div style={{ height: 400, width: "100%" }}>
+        {renderConfirmDialog()}
+        {renderConfirmDelete()}
 
-      <DataGrid
-        getRowId={(row) => row.id_usuario} //con esta linea le digo a data grid que mi id unico es id_usuario, por defecto espera que se llame id
-        rows={state.users}
-        columns={columns}
-        loading={!state.isLoaded}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-      />
-      {!!snackbar && (
-        <Snackbar open onClose={handleCloseSnackbar} autoHideDuration={6000}>
-          <Alert {...snackbar} onClose={handleCloseSnackbar} />
-        </Snackbar>
-      )}
-    </div>
+        <DataGrid
+          getRowId={(row) => row.id_usuario} //con esta linea le digo a data grid que mi id unico es id_usuario, por defecto espera que se llame id
+          rows={state.users}
+          columns={columns}
+          loading={!state.isLoaded}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          localeText={esES.components.MuiDataGrid.defaultProps.localeText}
+        />
+        {!!snackbar && (
+          <Snackbar open onClose={handleCloseSnackbar} autoHideDuration={6000}>
+            <Alert {...snackbar} onClose={handleCloseSnackbar} />
+          </Snackbar>
+        )}
+      </div>
+    
   );
 }

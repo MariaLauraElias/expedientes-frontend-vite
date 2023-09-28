@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useContext } from "react";
-import { NavLink, Navigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import AuthContext from "../contexts/AuthContext";
 import ListSubheader from "@mui/material/ListSubheader";
@@ -19,7 +19,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import GroupIcon from "@mui/icons-material/Group";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import LogoutIcon from "@mui/icons-material/Logout";
-import UserContext from "../contexts/UserContext";
 
 export default function NavLateral() {
   const [open, setOpen] = React.useState(true);
@@ -29,7 +28,6 @@ export default function NavLateral() {
   };
 
   const { state, logout } = useContext(AuthContext);
-  const { editPassOwn } = useContext(UserContext);
   const isAdmin =
     state.isLogged && state.user.nivel_permiso === "ADM" ? true : false;
 
@@ -37,6 +35,11 @@ export default function NavLateral() {
   let activeStyle = {
     textDecoration: "underline",
     fontWeight: "bold",
+    color: "black",
+  };
+  let noActiveStyle = {
+    textDecoration: "none",
+    color: "black",
   };
 
   const onLogout = () => {
@@ -59,7 +62,7 @@ export default function NavLateral() {
         <NavLink
           to={"/"}
           className={"nav-link"}
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+          style={({ isActive }) => (isActive ? activeStyle : noActiveStyle)}
         >
           <ListItemButton>
             <ListItemIcon>
@@ -73,7 +76,7 @@ export default function NavLateral() {
         <NavLink
           to={"/consulta"}
           className={"nav-link"}
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+          style={({ isActive }) => (isActive ? activeStyle : noActiveStyle)}
         >
           <ListItemButton>
             <ListItemIcon>
@@ -87,7 +90,7 @@ export default function NavLateral() {
         <NavLink
           to={"/agregarexpediente"}
           className={"nav-link"}
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+          style={({ isActive }) => (isActive ? activeStyle : noActiveStyle)}
         >
           <ListItemButton>
             <ListItemIcon>
@@ -111,7 +114,7 @@ export default function NavLateral() {
               <NavLink
                 to={"/listarUsuarios"}
                 className={"nav-link"}
-                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                style={({ isActive }) => (isActive ? activeStyle : noActiveStyle)}
               >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
@@ -125,7 +128,7 @@ export default function NavLateral() {
               <NavLink
                 to={"/agregarUsuarios"}
                 className={"nav-link"}
-                style={({ isActive }) => (isActive ? activeStyle : undefined)}
+                style={({ isActive }) => (isActive ? activeStyle : noActiveStyle)}
               >
                 <ListItemButton sx={{ pl: 4 }}>
                   <ListItemIcon>
@@ -142,7 +145,7 @@ export default function NavLateral() {
         <NavLink
           to={"/editarPassPropia"}
           className={"nav-link"}
-          style={({ isActive }) => (isActive ? activeStyle : undefined)}
+          style={({ isActive }) => (isActive ? activeStyle : noActiveStyle)}
         >
           <ListItemButton>
             <ListItemIcon>

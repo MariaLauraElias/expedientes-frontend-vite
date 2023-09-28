@@ -1,6 +1,6 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
-import { useContext } from "react";
+import { useParams, Navigate } from 'react-router-dom'
+import { useContext, useState } from "react";
 import * as Yup from "yup";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -55,7 +55,7 @@ const schema = Yup.object().shape({
 export default function EditarPass() {
   const {id} = useParams();
   const { editarPass } = useContext(UserContext);
-
+  const [redirect, setRedirect] = useState(false);
   const { handleChange, handleSubmit, errors, values, setFieldValue, touched } =
     useFormik({
       initialValues: {
@@ -66,12 +66,15 @@ export default function EditarPass() {
 
       onSubmit: (values, { resetForm }) => {
         editarPass(id, values);
+        setRedirect(true);
         resetForm();
       },
     });
 
   return (
     <ThemeProvider theme={defaultTheme}>
+      {redirect && <Navigate to="/listarUsuarios" replace={true} />}
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
